@@ -44,8 +44,23 @@
     var rlen = rows0.length;
     var cells0 = rows0[0].cells;
     var clen = cells0.length;
-    pixelx = parseInt(clen / 10);
-    pixely = 1;
+    var pixelx = parseInt(clen / 10);
+    var moveTimes = 0;
+    var pixely = pixely0 = 1;
+    var pixely1 = pixely7 = parseInt(rlen / 20);
+    var pixely2 = pixely6 = parseInt(rlen / 10);
+    var pixely3 = pixely5 = parseInt(rlen / 5);
+    var pixely4 = parseInt(rlen / 2);
+    document.addEventListener('keydown', function(e)
+    {
+        if (e.keyCode = 32 && moveTimes == 0) {
+            y = pixely;
+            pixely = pixely1;
+            board.rows[rlen - pixely - 1].cells[pixelx].style.background = '';
+            board.rows[rlen - y - 1].cells[pixelx].style.background = '';
+            moveTimes++;
+        }
+    });
     function initiate() {
         for (var i = 0; i < clen; i++) {
             var rows = board.rows;
@@ -90,8 +105,45 @@
             }
             distance++;
         }
-        board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
-        board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
+        if (moveTimes == 0) {
+            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
+            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
+        } else if (moveTimes >= 1 && moveTimes < 4) {
+            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
+            pixely = pixely2;
+            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
+            moveTimes++;
+        } else if (moveTimes >= 4 && moveTimes < 7) {
+            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
+            pixely = pixely3;
+            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
+            moveTimes++;
+        } else if (moveTimes >= 7 && moveTimes < 16) {
+            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
+            pixely = pixely4;
+            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
+            moveTimes++;
+        } else if (moveTimes >= 16 && moveTimes < 19) {
+            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
+            pixely = pixely5;
+            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
+            moveTimes++;
+        } else if (moveTimes >= 19 && moveTimes < 22) {
+            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
+            pixely = pixely6;
+            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
+            moveTimes++;
+        } else if (moveTimes >= 22 && moveTimes < 25) {
+            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
+            pixely = pixely7;
+            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
+            moveTimes++;
+        } else if (moveTimes == 25) {
+            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
+            pixely = pixely0;
+            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
+            moveTimes = 0;
+        }
         times++;
         if (times < 2000) {
             setTimeout(move, 10)
