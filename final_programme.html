@@ -1,38 +1,103 @@
 <!DOCTYPE html>
-<head>
-    <meta http-equiv="Content-Type" content="text/css; charset=utf-8">
-    <title>Running</title>
-    <style type="text/css">
+<html>
+    <head><meta charset="utf-8">
+        <title></title>
+        <style type="text/css">
         table {
-            width: 50px;
-            margin: 50px auto;
+            margin: 100px auto;
             border-collapse: collapse;
-            text-align: center;
         }
 
         td,
         th {
-            border: 1px solid #333;
+            height: 1px;
+            width: 1px;
         }
-        thead tr {
-            height: 40px;
-            background-color: #ccc;
+        </style>
+        </head>
+        <body>
+            <table cellspacing="0" id=board>
+                <tbody>
+                </tbody>
+            </table>
+        </body>
+        <script type="text/javascript">
+    //console.log(datas.length);
+    var width = document.documentElement.clientWidth;
+    var height = width / 5;
+    var tbody = document.querySelector('tbody');
+    for (var i = 0; i < height / 5; i++) {
+        //创建行
+        trs = document.createElement('tr');
+        tbody.appendChild(trs);
+        //创建单元格 td的数量取决于每个对象里面的属性个数
+        for(var k = 0; k < width / 5; k++){
+            //创建单元格
+            var td=document.createElement('td');
+            //把对象里面的属性值 给td
+            //console.log(datas[i][k]);
+            trs.appendChild(td);
         }
-    </style>
-</head>
-<body>
-    <script type="text/javascript">
-        var width = document.documentElement.clientWidth;
-        var height = width / 5;
-        var tbody = document.querySelector('tbody');
-        for (var i = 0; i < 5; i++) {
-            var tr = document.createElement('tr');
-            tbody.appendChild(tr);
-            for (var k = 0; k < 5; k++) {
-                var td = document.createElement('td');
-                tbody.appendChild(td);
+    }
+    var board = document.getElementById('board');
+    var rows0 = board.rows;
+    var rlen = rows0.length;
+    var cells0 = rows0[0].cells;
+    var clen = cells0.length;
+    pixelx = parseInt(clen / 10);
+    pixely = 1;
+    function initiate() {
+        for (var i = 0; i < clen; i++) {
+            var rows = board.rows;
+            var cells = rows[rlen - 1].cells;
+            cells[i].style.background = 'green';
+        }
+        for (var i = parseInt(rlen / 3 * 2); i < rlen; i++) {
+            var rows = board.rows;
+            var cells = rows[i].cells;
+            cells[clen - 1].style.background = 'green';
+        }
+        board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
+    }
+    var times = 0;
+    var distance = 0;
+    var MINDISTANCE = parseInt(rlen / 3 * 2) * 2;
+    function move(){
+        var board = document.getElementById('board');
+        var rows = board.rows;
+        if (board.rows[rlen - pixely - 1].cells[pixelx + 1].style.background == 'green') {
+            return;
+        }
+        for (var i = 0; i < rlen; i++) {
+            var cells = rows[i].cells;
+            var clen = cells.length;
+            for (var k = 0; k < clen-1; k++) {
+                cells[k].style.background = cells[k+1].style.background;
             }
         }
+        var chance = Math.random();
+        if (chance > 0.9 && distance >= MINDISTANCE) {
+            for (var i = parseInt(rlen / 3 * 2); i < rlen; i++) {
+                var cells = rows[i].cells;
+                cells[clen-1].style.background = 'green';
+            }
+            distance = 0;
+        }
+        else {
+            for (var i = parseInt(rlen / 3 * 2); i < rlen - 1; i++) {
+                var cells = rows[i].cells;
+                cells[clen-1].style.background = '';
+            }
+            distance++;
+        }
+        board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
+        board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
+        times++;
+        if (times < 2000) {
+            setTimeout(move, 10)
+        }
+    }
+    initiate();
+    move();
     </script>
-</body>
-</html>
+    </html>
