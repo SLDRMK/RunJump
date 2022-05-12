@@ -39,29 +39,35 @@
             trs.appendChild(td);
         }
     }
+    var board = document.getElementById('board');
+    var rows0 = board.rows;
+    var rlen = rows0.length;
+    var cells0 = rows0[0].cells;
+    var clen = cells0.length;
+    pixelx = parseInt(clen / 10);
+    pixely = 1;
     function initiate() {
-        var board = document.getElementById('board');
-        var rows = board.rows;
-        var rlen = rows.length;
-        var cells = rows[rlen - 1].cells;
-        var clen = cells.length;
         for (var i = 0; i < clen; i++) {
+            var rows = board.rows;
+            var cells = rows[rlen - 1].cells;
             cells[i].style.background = 'green';
         }
-        for (var i = rlen / 3 * 2; i < rlen; i++) {
+        for (var i = parseInt(rlen / 3 * 2); i < rlen; i++) {
+            var rows = board.rows;
             var cells = rows[i].cells;
-            var clen = cells.length;
-            cells[clen-1].style.background = 'green';
+            cells[clen - 1].style.background = 'green';
         }
-
+        board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
     }
     var times = 0;
     var distance = 0;
-    var MINDISTANCE = 10;
+    var MINDISTANCE = parseInt(rlen / 3 * 2) * 2;
     function move(){
         var board = document.getElementById('board');
         var rows = board.rows;
-        var rlen = rows.length;
+        if (board.rows[rlen - pixely - 1].cells[pixelx + 1].style.background == 'green') {
+            return;
+        }
         for (var i = 0; i < rlen; i++) {
             var cells = rows[i].cells;
             var clen = cells.length;
@@ -71,24 +77,24 @@
         }
         var chance = Math.random();
         if (chance > 0.9 && distance >= MINDISTANCE) {
-            for (var i = rlen / 3 * 2; i < rlen; i++) {
+            for (var i = parseInt(rlen / 3 * 2); i < rlen; i++) {
                 var cells = rows[i].cells;
-                var clen = cells.length;
                 cells[clen-1].style.background = 'green';
             }
             distance = 0;
         }
         else {
-            for (var i = rlen / 3 * 2; i < rlen - 1; i++) {
+            for (var i = parseInt(rlen / 3 * 2); i < rlen - 1; i++) {
                 var cells = rows[i].cells;
-                var clen = cells.length;
                 cells[clen-1].style.background = '';
             }
             distance++;
         }
+        board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
+        board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
         times++;
-        if (times < 1000) {
-            setTimeout(move, 100)
+        if (times < 2000) {
+            setTimeout(move, 10)
         }
     }
     initiate();
