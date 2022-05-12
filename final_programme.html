@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/css; charset=utf-8">
+    <title>Running</title>
+    <style type="text/css">
+        table {
+            width: 50px;
+            margin: 50px auto;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        td,
+        th {
+            border: 1px solid #333;
+        }
+        thead tr {
+            height: 40px;
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        var width = document.documentElement.clientWidth;
+        var height = width / 5;
+        var tbody = document.querySelector('tbody');
+        for (var i = 0; i < 5; i++) {
+            var tr = document.createElement('tr');
+            tbody.appendChild(tr);
+            for (var k = 0; k < 5; k++) {
+                var td = document.createElement('td');
+                tbody.appendChild(td);
+            }
+        }
+    </script>
+</body>
+</html>
