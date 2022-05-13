@@ -7,15 +7,33 @@
             margin: 100px auto;
             border-collapse: collapse;
         }
-
         td,
         th {
             height: 1px;
             width: 1px;
         }
+        .mytd {
+            margin: 0px auto;
+            width: 200px;
+            height: 50px;
+            background: red;
+        }
         </style>
         </head>
         <body>
+            <table class="mytd">
+                <thead>
+                    <td>Highest Scores: </td>
+                    <td id=highestScores align="center">0</td>
+                </thead>
+            </table>    
+            <table class="mytd">
+                <thead>
+                    <td>Scores: </td>
+                    <td id=scores align="center">0</td>
+                </thead>
+            </table>    
+
             <table cellspacing="0" id=board>
                 <tbody>
                 </tbody>
@@ -39,6 +57,7 @@
             trs.appendChild(td);
         }
     }
+    var scores = parseInt(document.getElementById('scores').innerHTML);
     var board = document.getElementById('board');
     var rows0 = board.rows;
     var rlen = rows0.length;
@@ -61,7 +80,19 @@
             moveTimes++;
         }
     });
+    var times = 0;
+    var distance = 0;
+    var MINDISTANCE = parseInt(rlen / 3 * 2) * 2;
     function initiate() {
+        document.getElementById('scores').innerHTML = 0;
+        distance = 0;
+        for (var i = 0; i < rlen; i++) {
+            var rows = board.rows;
+            var cells = rows[i].cells;
+            for (var k = 0; k < clen; k++) {
+                cells[k].style.background = "";
+            }
+        }
         for (var i = 0; i < clen; i++) {
             var rows = board.rows;
             var cells = rows[rlen - 1].cells;
@@ -74,13 +105,15 @@
         }
         board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
     }
-    var times = 0;
-    var distance = 0;
-    var MINDISTANCE = parseInt(rlen / 3 * 2) * 2;
     function move(){
+        document.getElementById('scores').innerHTML = parseInt(document.getElementById('scores').innerHTML) + 1;
         var board = document.getElementById('board');
         var rows = board.rows;
         if (board.rows[rlen - pixely - 1].cells[pixelx + 1].style.background == 'green') {
+            document.getElementById('highestScores').innerHTML = parseInt(document.getElementById('scores').innerHTML);
+            alert("You lost!");
+            initiate();
+            move();
             return;
         }
         for (var i = 0; i < rlen; i++) {
