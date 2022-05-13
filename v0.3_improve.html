@@ -23,13 +23,13 @@
         <body>
             <table class="mytd">
                 <thead>
-                    <td>Highest Scores: </td>
+                    <td>Highest Score: </td>
                     <td id=highestScores align="center">0</td>
                 </thead>
             </table>    
             <table class="mytd">
                 <thead>
-                    <td>Scores: </td>
+                    <td>Score: </td>
                     <td id=scores align="center">0</td>
                 </thead>
             </table>    
@@ -80,7 +80,7 @@
             moveTimes++;
         }
     });
-    var times = 0;
+    //var times = 0;
     var distance = 0;
     var MINDISTANCE = parseInt(rlen / 3 * 2) * 2;
     function initiate() {
@@ -107,10 +107,12 @@
     }
     function move(){
         document.getElementById('scores').innerHTML = parseInt(document.getElementById('scores').innerHTML) + 1;
+        if (parseInt(document.getElementById('scores').innerHTML) > parseInt(document.getElementById('highestScores').innerHTML)) {
+                document.getElementById('highestScores').innerHTML = parseInt(document.getElementById('scores').innerHTML);
+            }
         var board = document.getElementById('board');
         var rows = board.rows;
         if (board.rows[rlen - pixely - 1].cells[pixelx + 1].style.background == 'green') {
-            document.getElementById('highestScores').innerHTML = parseInt(document.getElementById('scores').innerHTML);
             alert("You lost!");
             initiate();
             move();
@@ -177,10 +179,10 @@
             board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
             moveTimes = 0;
         }
-        times++;
-        if (times < 2000) {
+        //times++;
+        //if (times < 2000) {
             setTimeout(move, 10)
-        }
+        //}
     }
     initiate();
     move();
