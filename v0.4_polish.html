@@ -57,26 +57,31 @@
             trs.appendChild(td);
         }
     }
+    var G = 'green';
+    var R = 'red';
+    var B = '';
     var scores = parseInt(document.getElementById('scores').innerHTML);
     var board = document.getElementById('board');
-    var rows0 = board.rows;
-    var rlen = rows0.length;
-    var cells0 = rows0[0].cells;
+    var rows = board.rows;
+    var rlen = rows.length;
+    var cells0 = rows[0].cells;
     var clen = cells0.length;
     var pixelx = parseInt(clen / 10);
     var moveTimes = 0;
     var pixely = pixely0 = 1;
-    var pixely1 = pixely7 = parseInt(rlen / 20);
-    var pixely2 = pixely6 = parseInt(rlen / 10);
-    var pixely3 = pixely5 = parseInt(rlen / 5);
+    var pixely1 = parseInt(rlen / 20);
+    var pixely2 = parseInt(rlen / 10);
+    var pixely3 = parseInt(rlen / 5);
     var pixely4 = parseInt(rlen / 2);
+    var lastpixely;
+    var DURATION = 3;
     document.addEventListener('keydown', function(e)
     {
         if (e.keyCode = 32 && moveTimes == 0) {
             y = pixely;
             pixely = pixely1;
-            board.rows[rlen - pixely - 1].cells[pixelx].style.background = '';
-            board.rows[rlen - y - 1].cells[pixelx].style.background = '';
+            changeColor(rlen - pixely - 1, pixelx, B);
+            changeColor(rlen - y - 1, pixelx, B);
             moveTimes++;
         }
     });
@@ -87,32 +92,33 @@
         document.getElementById('scores').innerHTML = 0;
         distance = 0;
         for (var i = 0; i < rlen; i++) {
-            var rows = board.rows;
-            var cells = rows[i].cells;
             for (var k = 0; k < clen; k++) {
-                cells[k].style.background = "";
+                changeColor(i, k, '');
             }
         }
         for (var i = 0; i < clen; i++) {
-            var rows = board.rows;
-            var cells = rows[rlen - 1].cells;
-            cells[i].style.background = 'green';
+            changeColor(rlen - 1, i, G);
         }
         for (var i = parseInt(rlen / 3 * 2); i < rlen; i++) {
-            var rows = board.rows;
-            var cells = rows[i].cells;
-            cells[clen - 1].style.background = 'green';
+            changeColor(i, clen - 1, G)
         }
-        board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
+        changeColor(rlen - pixely - 1, pixelx, R);
+    }
+    function changeColor(row, cell, color) {
+        cells = rows[row].cells;
+        cells[cell].style.background = color;
+    }
+    function readColor(row, cell) {
+        cells = rows[row].cells;
+        return cells[cell].style.background;
     }
     function move(){
+        lastpixely = pixely;
         document.getElementById('scores').innerHTML = parseInt(document.getElementById('scores').innerHTML) + 1;
         if (parseInt(document.getElementById('scores').innerHTML) > parseInt(document.getElementById('highestScores').innerHTML)) {
                 document.getElementById('highestScores').innerHTML = parseInt(document.getElementById('scores').innerHTML);
             }
-        var board = document.getElementById('board');
-        var rows = board.rows;
-        if (board.rows[rlen - pixely - 1].cells[pixelx + 1].style.background == 'green') {
+        if (readColor(rlen - pixely - 1, pixelx + 1) == G) {
             alert("You lost!");
             initiate();
             move();
@@ -140,49 +146,25 @@
             }
             distance++;
         }
-        if (moveTimes == 0) {
-            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
-            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
-        } else if (moveTimes >= 1 && moveTimes < 4) {
-            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
+        changeColor(rlen - pixely - 1, pixelx - 1, B);
+        if (moveTimes >= 1 && moveTimes < 1 + DURATION || (moveTimes >= 19 && moveTimes < 19 + DURATION)) {
             pixely = pixely2;
-            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
             moveTimes++;
-        } else if (moveTimes >= 4 && moveTimes < 7) {
-            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
+        } else if (moveTimes >= 4 && moveTimes < 4 + DURATION || (moveTimes >= 16 && moveTimes < 16 + DURATION)) {
             pixely = pixely3;
-            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
             moveTimes++;
         } else if (moveTimes >= 7 && moveTimes < 16) {
-            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
             pixely = pixely4;
-            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
-            moveTimes++;
-        } else if (moveTimes >= 16 && moveTimes < 19) {
-            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
-            pixely = pixely5;
-            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
-            moveTimes++;
-        } else if (moveTimes >= 19 && moveTimes < 22) {
-            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
-            pixely = pixely6;
-            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
             moveTimes++;
         } else if (moveTimes >= 22 && moveTimes < 25) {
-            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
-            pixely = pixely7;
-            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
+            pixely = pixely1;
             moveTimes++;
         } else if (moveTimes == 25) {
-            board.rows[rlen - pixely - 1].cells[pixelx - 1].style.background = '';
             pixely = pixely0;
-            board.rows[rlen - pixely - 1].cells[pixelx].style.background = 'red';
             moveTimes = 0;
         }
-        //times++;
-        //if (times < 2000) {
-            setTimeout(move, 10)
-        //}
+        changeColor(rlen - pixely - 1, pixelx, R);
+        setTimeout(move, 10)
     }
     initiate();
     move();
