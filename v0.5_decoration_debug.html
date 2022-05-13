@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+    <head><meta charset="utf-8">
+        <title></title>
+        <style type="text/css">
+        table {
+            margin: 100px auto;
+            border-collapse: collapse;
+        }
+        td,
+        th {
+            height: 1px;
+            width: 1px;
+        }
+        .mytd {
+            margin: 0px auto;
+            width: 200px;
+            height: 50px;
+            background: red;
+        }
+        </style>
+        </head>
+        <body>
+            <table class="mytd">
+                <thead>
+                    <td>Highest Score: </td>
+                    <td id=highestScores align="center">0</td>
+                </thead>
+            </table>    
+            <table class="mytd">
+                <thead>
+                    <td>Score: </td>
+                    <td id=scores align="center">0</td>
+                </thead>
+            </table>    
+
+            <table cellspacing="0" id=board>
+                <tbody>
+                </tbody>
+            </table>
+        </body>
+        <script type="text/javascript">
+    //console.log(datas.length);
+    var width = document.documentElement.clientWidth;
+    var height = width / 5;
+    var tbody = document.querySelector('tbody');
+    for (var i = 0; i < height / 5; i++) {
+        //创建行
+        trs = document.createElement('tr');
+        tbody.appendChild(trs);
+        //创建单元格 td的数量取决于每个对象里面的属性个数
+        for(var k = 0; k < width / 5; k++){
+            //创建单元格
+            var td=document.createElement('td');
+            //把对象里面的属性值 给td
+            //console.log(datas[i][k]);
+            trs.appendChild(td);
+        }
+    }
+    var G = 'green';
+    var R = 'red';
+    var B = '';
+    var scores = parseInt(document.getElementById('scores').innerHTML);
+    var board = document.getElementById('board');
+    var rows = board.rows;
+    var rlen = rows.length;
+    var cells0 = rows[0].cells;
+    var clen = cells0.length;
+    var pixelx = parseInt(clen / 10);
+    var moveTimes = 0;
+    var pixely = pixely0 = 1;
+    var pixely1 = parseInt(rlen / 20);
+    var pixely2 = parseInt(rlen / 10);
+    var pixely3 = parseInt(rlen / 5);
+    var pixely4 = parseInt(rlen / 2);
+    var lastpixely;
+    var DURATION = 3;
+    document.addEventListener('keydown', function(e)
+    {
+        if (e.keyCode = 32 && moveTimes == 0) {
+            y = pixely;
+            pixely = pixely1;
+            changeColor(rlen - pixely - 1, pixelx, B);
+            changeColor(rlen - y - 1, pixelx, B);
+            moveTimes++;
+        }
+    });
+    //var times = 0;
+    var distance = 0;
+    var MINDISTANCE = parseInt(rlen / 3 * 2) * 2;
+    function initiate() {
+        document.getElementById('scores').innerHTML = 0;
+        distance = 0;
+        for (var i = 0; i < rlen; i++) {
+            for (var k = 0; k < clen; k++) {
+                changeColor(i, k, '');
+            }
+        }
+        for (var i = 0; i < clen; i++) {
+            changeColor(rlen - 1, i, G);
+        }
+        for (var i = parseInt(rlen / 3 * 2); i < rlen; i++) {
+            changeColor(i, clen - 1, G)
+        }
+        changeColor(rlen - pixely - 1, pixelx, R);
+    }
+    function changeColor(row, cell, color) {
+        cells = rows[row].cells;
+        cells[cell].style.background = color;
+    }
+    function readColor(row, cell) {
+        cells = rows[row].cells;
+        return cells[cell].style.background;
+    }
+    function move(){
+        lastpixely = pixely;
+        document.getElementById('scores').innerHTML = parseInt(document.getElementById('scores').innerHTML) + 1;
+        if (parseInt(document.getElementById('scores').innerHTML) > parseInt(document.getElementById('highestScores').innerHTML)) {
+                document.getElementById('highestScores').innerHTML = parseInt(document.getElementById('scores').innerHTML);
+            }
+        if (readColor(rlen - pixely - 1, pixelx + 1) == G) {
+            alert("You lost!");
+            initiate();
+            move();
+            return;
+        }
+        for (var i = 0; i < rlen; i++) {
+            var cells = rows[i].cells;
+            var clen = cells.length;
+            for (var k = 0; k < clen-1; k++) {
+                cells[k].style.background = cells[k+1].style.background;
+            }
+        }
+        var chance = Math.random();
+        if (chance > 0.9 && distance >= MINDISTANCE) {
+            for (var i = parseInt(rlen / 3 * 2); i < rlen; i++) {
+                var cells = rows[i].cells;
+                cells[clen-1].style.background = 'green';
+            }
+            distance = 0;
+        }
+        else {
+            for (var i = parseInt(rlen / 3 * 2); i < rlen - 1; i++) {
+                var cells = rows[i].cells;
+                cells[clen-1].style.background = '';
+            }
+            distance++;
+        }
+        changeColor(rlen - pixely - 1, pixelx - 1, B);
+        if (moveTimes >= 1 && moveTimes < 1 + DURATION || (moveTimes >= 19 && moveTimes < 19 + DURATION)) {
+            pixely = pixely2;
+            moveTimes++;
+        } else if (moveTimes >= 4 && moveTimes < 4 + DURATION || (moveTimes >= 16 && moveTimes < 16 + DURATION)) {
+            pixely = pixely3;
+            moveTimes++;
+        } else if (moveTimes >= 7 && moveTimes < 16) {
+            pixely = pixely4;
+            moveTimes++;
+        } else if (moveTimes >= 22 && moveTimes < 25) {
+            pixely = pixely1;
+            moveTimes++;
+        } else if (moveTimes == 25) {
+            pixely = pixely0;
+            moveTimes = 0;
+        }
+        changeColor(rlen - pixely - 1, pixelx, R);
+        setTimeout(move, 10)
+    }
+    initiate();
+    move();
+    </script>
+    </html>
