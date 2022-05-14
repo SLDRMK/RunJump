@@ -57,10 +57,13 @@
             trs.appendChild(td);
         }
     }
+    var difficulty = 100;
     var G = 'green';
     var R = 'red';
     var B = '';
-    var scores = parseInt(document.getElementById('scores').innerHTML);
+    var ScoreID = 'scores';
+    var HighestScoreID = 'highestScores';
+    var scores = parseInt(readInnerHTML(ScoreID));
     var board = document.getElementById('board');
     var rows = board.rows;
     var rlen = rows.length;
@@ -68,18 +71,17 @@
     var clen = cells0.length;
     var pixelx = parseInt(clen / 10);
     var moveTimes = 0;
-    var pixely = pixely0 = 1;
-    var pixely1 = parseInt(rlen / 20);
-    var pixely2 = parseInt(rlen / 10);
-    var pixely3 = parseInt(rlen / 5);
-    var pixely4 = parseInt(rlen / 2);
+    var pixely = 1;
+    var pixelyMove = [1, parseInt(rlen / 20), parseInt(rlen / 10), parseInt(rlen / 5), parseInt(rlen / 2), 
+    parseInt(rlen / 2), parseInt(rlen / 2),  parseInt(rlen / 5), parseInt(rlen / 10), parseInt(rlen / 20)];
+    lenOfMove = pixelyMove.length;
     var lastpixely;
     var DURATION = 3;
     document.addEventListener('keydown', function(e)
     {
         if (e.keyCode = 32 && moveTimes == 0) {
             y = pixely;
-            pixely = pixely1;
+            pixely = pixelyMove[1];
             changeColor(rlen - pixely - 1, pixelx, B);
             changeColor(rlen - y - 1, pixelx, B);
             moveTimes++;
@@ -88,8 +90,15 @@
     //var times = 0;
     var distance = 0;
     var MINDISTANCE = parseInt(rlen / 3 * 2) * 2;
+    function changeInnerHTML(id, things) {
+        document.getElementById(id).innerHTML = things;
+    }
+    function readInnerHTML(id) {
+        return document.getElementById(id).innerHTML;
+    }
     function initiate() {
-        document.getElementById('scores').innerHTML = 0;
+        changeInnerHTML(ScoreID, 0);
+        //document.getElementById('scores').innerHTML = 0;
         distance = 0;
         for (var i = 0; i < rlen; i++) {
             for (var k = 0; k < clen; k++) {
@@ -114,10 +123,12 @@
     }
     function move(){
         lastpixely = pixely;
-        document.getElementById('scores').innerHTML = parseInt(document.getElementById('scores').innerHTML) + 1;
-        if (parseInt(document.getElementById('scores').innerHTML) > parseInt(document.getElementById('highestScores').innerHTML)) {
-                document.getElementById('highestScores').innerHTML = parseInt(document.getElementById('scores').innerHTML);
-            }
+        changeInnerHTML(ScoreID, parseInt(readInnerHTML(ScoreID)) + 1);
+        //document.getElementById('scores').innerHTML = parseInt(document.getElementById('scores').innerHTML) + 1;
+        if (parseInt(readInnerHTML(ScoreID)) > parseInt(readInnerHTML(HighestScoreID))) {
+            changeInnerHTML(HighestScoreID, parseInt(readInnerHTML(ScoreID)));        
+            //document.getElementById('highestScores').innerHTML = parseInt(document.getElementById('scores').innerHTML);
+        }
         if (readColor(rlen - pixely - 1, pixelx + 1) == G) {
             alert("You lost!");
             initiate();
@@ -132,7 +143,7 @@
             }
         }
         var chance = Math.random();
-        if (chance > 0.9 && distance >= MINDISTANCE) {
+        if (chance > 1 - difficulty / 10000 && distance >= difficulty / 10) {
             for (var i = parseInt(rlen / 3 * 2); i < rlen; i++) {
                 var cells = rows[i].cells;
                 cells[clen-1].style.background = 'green';
@@ -147,7 +158,18 @@
             distance++;
         }
         changeColor(rlen - pixely - 1, pixelx - 1, B);
-        if (moveTimes >= 1 && moveTimes < 1 + DURATION || (moveTimes >= 19 && moveTimes < 19 + DURATION)) {
+        for (var i = 0; i < lenOfMove; i++) {
+            if (moveTimes > 0 && moveTimes < (lenOfMove - 2) * DURATION + 1) {
+                if (moveTimes >= i * DURATION + 1 && moveTimes < (i + 1) * DURATION + 1) {
+                    pixely = pixelyMove[i + 2];
+                    moveTimes++;
+                }
+            } else {
+                pixely = pixelyMove[0];
+                moveTimes = 0;
+            }
+        }
+        /*if (moveTimes >= 1 && moveTimes < 1 + DURATION || (moveTimes >= 19 && moveTimes < 19 + DURATION)) {
             pixely = pixely2;
             moveTimes++;
         } else if (moveTimes >= 4 && moveTimes < 4 + DURATION || (moveTimes >= 16 && moveTimes < 16 + DURATION)) {
@@ -162,7 +184,7 @@
         } else if (moveTimes == 25) {
             pixely = pixely0;
             moveTimes = 0;
-        }
+        }*/
         changeColor(rlen - pixely - 1, pixelx, R);
         setTimeout(move, 10)
     }
