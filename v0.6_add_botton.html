@@ -12,25 +12,31 @@
             height: 1px;
             width: 1px;
         }
-        .mytd {
+        .mytb {
             margin: 0px auto;
             width: 200px;
             height: 50px;
-            background: red;
+            background: rgb(146, 146, 255);
         }
         </style>
         </head>
         <body>
-            <table class="mytd">
+            <table class="mytb">
                 <thead>
                     <td>Highest Score: </td>
                     <td id=highestScores align="center">0</td>
                 </thead>
             </table>    
-            <table class="mytd">
+            <table class="mytb">
                 <thead>
                     <td>Score: </td>
                     <td id=scores align="center">0</td>
+                </thead>
+            </table>
+            <table class="mytb">
+                <thead>
+                    <td>difficulty </td>
+                    <td><form align="center"><input id=difficulty type="number" value=100></form></td>
                 </thead>
             </table>    
 
@@ -45,24 +51,20 @@
     var height = width / 5;
     var tbody = document.querySelector('tbody');
     for (var i = 0; i < height / 5; i++) {
-        //创建行
         trs = document.createElement('tr');
         tbody.appendChild(trs);
-        //创建单元格 td的数量取决于每个对象里面的属性个数
         for(var k = 0; k < width / 5; k++){
-            //创建单元格
             var td=document.createElement('td');
-            //把对象里面的属性值 给td
-            //console.log(datas[i][k]);
             trs.appendChild(td);
         }
     }
-    var difficulty = 100;
     var G = 'green';
     var R = 'red';
     var B = '';
     var ScoreID = 'scores';
     var HighestScoreID = 'highestScores';
+    var DifficultyID = 'difficulty';
+    var difficulty = parseInt(document.getElementById(DifficultyID).value);
     var scores = parseInt(readInnerHTML(ScoreID));
     var board = document.getElementById('board');
     var rows = board.rows;
@@ -111,7 +113,9 @@
         for (var i = parseInt(rlen / 3 * 2); i < rlen; i++) {
             changeColor(i, clen - 1, G)
         }
-        changeColor(rlen - pixely - 1, pixelx, R);
+        changeColor(rlen - pixely - 1, pixelx, B);
+        moveTimes = 0;
+        pixely = 1;
     }
     function changeColor(row, cell, color) {
         cells = rows[row].cells;
@@ -143,7 +147,7 @@
             }
         }
         var chance = Math.random();
-        if (chance > 1 - difficulty / 10000 && distance >= difficulty / 10) {
+        if (chance > 1 - difficulty / 2500 && distance >= difficulty / 200 * MINDISTANCE) {
             for (var i = parseInt(rlen / 3 * 2); i < rlen; i++) {
                 var cells = rows[i].cells;
                 cells[clen-1].style.background = 'green';
