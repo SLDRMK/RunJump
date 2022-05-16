@@ -3,6 +3,9 @@
     <head><meta charset="utf-8">
         <title></title>
         <style type="text/css">
+        body {
+            background-color: rgb(129, 196, 255);
+        }
         table {
             margin: 100px auto;
             border-collapse: collapse;
@@ -12,34 +15,45 @@
             height: 1px;
             width: 1px;
         }
-        .mytb {
+        .mytb1 {
             margin: 0px auto;
             width: 200px;
             height: 50px;
-            background: rgb(146, 146, 255);
+            background: rgb(80, 161, 219);
+        }
+        .mytb2 {
+            margin: 0px auto;
+            width: 200px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0);
         }
         </style>
         </head>
         <body>
-            <table class="mytb">
+            <h1 align="center" face="宋体">RunJump</h1>
+            <h2 align="center" face="宋体">Made By SLDRMK</h2>
+            <h3 align="center" face="宋体">邵志豪&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 2021K8009991002&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 中国科学院大学2113班人工智能专业</h3>
+            <p align="center" face="Times New Romans">Please Press Space to Jump and avoid hitting the walls.</p>
+            <table class="mytb1">
                 <thead>
                     <td>Highest Score: </td>
                     <td id=highestScores align="center">0</td>
                 </thead>
             </table>    
-            <table class="mytb">
+            <table class="mytb1">
                 <thead>
                     <td>Score: </td>
                     <td id=scores align="center">0</td>
                 </thead>
             </table>
-            <table class="mytb">
+            <table class="mytb2">
                 <thead>
                     <td>difficulty </td>
                     <td><form align="center"><input id=difficulty type="number" value=100></form></td>
                 </thead>
-            </table>    
-
+            </table>
+            <center><button onclick="clickbutton1()" id=button1>Start</button>
+                <button onclick="clickButton2()" id=button2>Reset</button></center>
             <table cellspacing="0" id=board>
                 <tbody>
                 </tbody>
@@ -64,6 +78,8 @@
     var ScoreID = 'scores';
     var HighestScoreID = 'highestScores';
     var DifficultyID = 'difficulty';
+    var B1ID = 'button1';
+    var B2ID = 'button2';
     var difficulty = parseInt(document.getElementById(DifficultyID).value);
     var scores = parseInt(readInnerHTML(ScoreID));
     var board = document.getElementById('board');
@@ -190,9 +206,24 @@
             moveTimes = 0;
         }*/
         changeColor(rlen - pixely - 1, pixelx, R);
-        setTimeout(move, 10)
+        if (readInnerHTML(B1ID) == "Pause") {
+            setTimeout(move, 10);
+        }
+    }
+    function clickbutton1() {
+        if (readInnerHTML(B1ID) == "Start" || readInnerHTML(B1ID) == "Go On") {
+            document.getElementById(B1ID).focus();
+            changeInnerHTML(B1ID, "Pause");
+            move();
+        }
+        else {
+            document.getElementById(B1ID).focus();
+            changeInnerHTML(B1ID, "Go On");
+        }
+    }
+    function clickButton2() {
+        initiate();
     }
     initiate();
-    move();
     </script>
     </html>
