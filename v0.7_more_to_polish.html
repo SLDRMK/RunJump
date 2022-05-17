@@ -43,6 +43,7 @@
             <h2 align="center" face="宋体">Made By SLDRMK</h2>
             <h3 align="center" face="宋体">邵志豪&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 2021K8009991002&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 中国科学院大学2113班人工智能专业</h3>
             <p align="center" face="Times New Romans">Please Press Space or Click "Jump" to Jump and avoid hitting the walls.</p>
+            <p align="center" face="Times New Romans">Please Press "Reset" to Upload the Settings.</p>
             <table class="mytb1">
                 <thead>
                     <td>Highest Score: </td>
@@ -100,8 +101,8 @@
     var pixelx = parseInt(clen / 10);
     var moveTimes = 0;
     var pixely = 1;
-    var pixelyMove = [1, parseInt(rlen / 20), parseInt(rlen / 10), parseInt(rlen / 5), parseInt(rlen / 2), 
-    parseInt(rlen / 2), parseInt(rlen / 2),  parseInt(rlen / 5), parseInt(rlen / 10), parseInt(rlen / 20)];
+    var pixelyMove = [1, parseInt(rlen / 10), parseInt(rlen / 5), parseInt(rlen / 2.5), rlen - 1, 
+    rlen - 1, rlen - 1, parseInt(rlen / 2.5), parseInt(rlen / 5), parseInt(rlen / 10)];
     lenOfMove = pixelyMove.length;
     var lastpixely;
     var DURATION = 3;
@@ -117,7 +118,7 @@
     });
     //var times = 0;
     var distance = 0;
-    var MINDISTANCE = parseInt(rlen / 3 * 2) * 2;
+    var MINDISTANCE = lenOfMove * DURATION * 2;
     function changeInnerHTML(id, things) {
         document.getElementById(id).innerHTML = things;
     }
@@ -125,6 +126,7 @@
         return document.getElementById(id).innerHTML;
     }
     function initiate() {
+        difficulty = parseInt(document.getElementById(DifficultyID).value);
         changeInnerHTML(ScoreID, 0);
         //document.getElementById('scores').innerHTML = 0;
         distance = 0;
@@ -136,7 +138,7 @@
         for (var i = 0; i < clen; i++) {
             changeColor(rlen - 1, i, G);
         }
-        for (var i = parseInt(rlen / 3 * 2); i < rlen; i++) {
+        for (var i = parseInt(rlen / 2); i < rlen; i++) {
             changeColor(i, clen - 1, G)
         }
         changeColor(rlen - pixely - 1, pixelx, B);
@@ -173,15 +175,15 @@
             }
         }
         var chance = Math.random();
-        if (chance > 1 - difficulty / 2500 && distance >= difficulty / 200 * MINDISTANCE) {
-            for (var i = parseInt(rlen / 3 * 2); i < rlen; i++) {
+        if (chance > 1 - difficulty / 5000 && distance >= difficulty / 200 * MINDISTANCE) {
+            for (var i = parseInt(rlen / 2); i < rlen; i++) {
                 var cells = rows[i].cells;
                 cells[clen-1].style.background = 'green';
             }
             distance = 0;
         }
         else {
-            for (var i = parseInt(rlen / 3 * 2); i < rlen - 1; i++) {
+            for (var i = parseInt(rlen / 2); i < rlen - 1; i++) {
                 var cells = rows[i].cells;
                 cells[clen-1].style.background = '';
             }
@@ -217,7 +219,7 @@
         }*/
         changeColor(rlen - pixely - 1, pixelx, R);
         if (readInnerHTML(B1ID) == "Pause") {
-            setTimeout(move, 10);
+            setTimeout(move, difficulty / 100 * 10);
         }
     }
     function clickbutton1() {
