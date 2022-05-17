@@ -27,13 +27,22 @@
             height: 50px;
             background: rgba(255, 255, 255, 0);
         }
+        .span1 {
+            border: 2px solid rgb(134, 134, 134);
+            background: rgb(255, 255, 255);
+        }
+        .span2 {
+            border: 2px solid rgb(134, 134, 134);
+            background: rgb(255, 255, 255);
+            float: right;
+        }
         </style>
         </head>
         <body>
             <h1 align="center" face="宋体">RunJump</h1>
             <h2 align="center" face="宋体">Made By SLDRMK</h2>
             <h3 align="center" face="宋体">邵志豪&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 2021K8009991002&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 中国科学院大学2113班人工智能专业</h3>
-            <p align="center" face="Times New Romans">Please Press Space to Jump and avoid hitting the walls.</p>
+            <p align="center" face="Times New Romans">Please Press Space or Click "Jump" to Jump and avoid hitting the walls.</p>
             <table class="mytb1">
                 <thead>
                     <td>Highest Score: </td>
@@ -52,12 +61,13 @@
                     <td><form align="center"><input id=difficulty type="number" value=100></form></td>
                 </thead>
             </table>
-            <center><button onclick="clickbutton1()" id=button1>Start</button>
-                <button onclick="clickButton2()" id=button2>Reset</button></center>
+            <center><span class="span1" onclick="clickbutton1()" id=button1>Start</span>
+                <span class="span1" onclick="clickButton2()" id=button2>Reset</span></center>
             <table cellspacing="0" id=board>
                 <tbody>
                 </tbody>
             </table>
+            <span class="span2" onclick="clickButton3()" id=button3>Jump</span>
         </body>
         <script type="text/javascript">
     //console.log(datas.length);
@@ -151,8 +161,8 @@
         }
         if (readColor(rlen - pixely - 1, pixelx + 1) == G) {
             alert("You lost!");
+            changeInnerHTML(B1ID, "Start");
             initiate();
-            move();
             return;
         }
         for (var i = 0; i < rlen; i++) {
@@ -212,17 +222,22 @@
     }
     function clickbutton1() {
         if (readInnerHTML(B1ID) == "Start" || readInnerHTML(B1ID) == "Go On") {
-            document.getElementById(B1ID).focus();
             changeInnerHTML(B1ID, "Pause");
             move();
         }
         else {
-            document.getElementById(B1ID).focus();
             changeInnerHTML(B1ID, "Go On");
         }
     }
     function clickButton2() {
         initiate();
+    }
+    function clickButton3() {
+        y = pixely;
+        pixely = pixelyMove[1];
+        changeColor(rlen - pixely - 1, pixelx, B);
+        changeColor(rlen - y - 1, pixelx, B);
+        moveTimes++;
     }
     initiate();
     </script>
