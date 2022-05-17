@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+    <head><meta charset="utf-8">
+        <title></title>
+        <style type="text/css">
+        body {
+            background-color: rgb(129, 196, 255);
+        }
+        table {
+            margin: 100px auto;
+            border-collapse: collapse;
+        }
+        td,
+        th {
+            height: 1px;
+            width: 1px;
+        }
+        .mytb1 {
+            margin: 0px auto;
+            width: 200px;
+            height: 50px;
+            background: rgb(80, 161, 219);
+        }
+        .mytb2 {
+            margin: 0px auto;
+            width: 200px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0);
+        }
+        .span1 {
+            border: 2px solid rgb(134, 134, 134);
+            background: rgb(255, 255, 255);
+        }
+        .span2 {
+            border: 2px solid rgb(134, 134, 134);
+            background: rgb(255, 255, 255);
+            float: right;
+        }
+        </style>
+        </head>
+        <body>
+            <h1 align="center" face="宋体">RunJump</h1>
+            <h2 align="center" face="宋体">Made By SLDRMK</h2>
+            <h3 align="center" face="宋体">邵志豪&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 2021K8009991002&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 中国科学院大学2113班人工智能专业</h3>
+            <p align="center" face="Times New Romans">Please Press Space or Click "Jump" to Jump and avoid hitting the walls.</p>
+            <table class="mytb1">
+                <thead>
+                    <td>Highest Score: </td>
+                    <td id=highestScores align="center">0</td>
+                </thead>
+            </table>    
+            <table class="mytb1">
+                <thead>
+                    <td>Score: </td>
+                    <td id=scores align="center">0</td>
+                </thead>
+            </table>
+            <table class="mytb2">
+                <thead>
+                    <td>difficulty </td>
+                    <td><form align="center"><input id=difficulty type="number" value=100></form></td>
+                </thead>
+            </table>
+            <center><span class="span1" onclick="clickbutton1()" id=button1>Start</span>
+                <span class="span1" onclick="clickButton2()" id=button2>Reset</span></center>
+            <table cellspacing="0" id=board>
+                <tbody>
+                </tbody>
+            </table>
+            <span class="span2" onclick="clickButton3()" id=button3>Jump</span>
+        </body>
+        <script type="text/javascript">
+    //console.log(datas.length);
+    var width = document.documentElement.clientWidth;
+    var height = width / 5;
+    var tbody = document.querySelector('tbody');
+    for (var i = 0; i < height / 5; i++) {
+        trs = document.createElement('tr');
+        tbody.appendChild(trs);
+        for(var k = 0; k < width / 5; k++){
+            var td=document.createElement('td');
+            trs.appendChild(td);
+        }
+    }
+    var G = 'green';
+    var R = 'red';
+    var B = '';
+    var ScoreID = 'scores';
+    var HighestScoreID = 'highestScores';
+    var DifficultyID = 'difficulty';
+    var B1ID = 'button1';
+    var B2ID = 'button2';
+    var difficulty = parseInt(document.getElementById(DifficultyID).value);
+    var scores = parseInt(readInnerHTML(ScoreID));
+    var board = document.getElementById('board');
+    var rows = board.rows;
+    var rlen = rows.length;
+    var cells0 = rows[0].cells;
+    var clen = cells0.length;
+    var pixelx = parseInt(clen / 10);
+    var moveTimes = 0;
+    var pixely = 1;
+    var pixelyMove = [1, parseInt(rlen / 20), parseInt(rlen / 10), parseInt(rlen / 5), parseInt(rlen / 2), 
+    parseInt(rlen / 2), parseInt(rlen / 2),  parseInt(rlen / 5), parseInt(rlen / 10), parseInt(rlen / 20)];
+    lenOfMove = pixelyMove.length;
+    var lastpixely;
+    var DURATION = 3;
+    document.addEventListener('keydown', function(e)
+    {
+        if (e.keyCode = 32 && moveTimes == 0) {
+            y = pixely;
+            pixely = pixelyMove[1];
+            changeColor(rlen - pixely - 1, pixelx, B);
+            changeColor(rlen - y - 1, pixelx, B);
+            moveTimes++;
+        }
+    });
+    //var times = 0;
+    var distance = 0;
+    var MINDISTANCE = parseInt(rlen / 3 * 2) * 2;
+    function changeInnerHTML(id, things) {
+        document.getElementById(id).innerHTML = things;
+    }
+    function readInnerHTML(id) {
+        return document.getElementById(id).innerHTML;
+    }
+    function initiate() {
+        changeInnerHTML(ScoreID, 0);
+        //document.getElementById('scores').innerHTML = 0;
+        distance = 0;
+        for (var i = 0; i < rlen; i++) {
+            for (var k = 0; k < clen; k++) {
+                changeColor(i, k, '');
+            }
+        }
+        for (var i = 0; i < clen; i++) {
+            changeColor(rlen - 1, i, G);
+        }
+        for (var i = parseInt(rlen / 3 * 2); i < rlen; i++) {
+            changeColor(i, clen - 1, G)
+        }
+        changeColor(rlen - pixely - 1, pixelx, B);
+        moveTimes = 0;
+        pixely = 1;
+    }
+    function changeColor(row, cell, color) {
+        cells = rows[row].cells;
+        cells[cell].style.background = color;
+    }
+    function readColor(row, cell) {
+        cells = rows[row].cells;
+        return cells[cell].style.background;
+    }
+    function move(){
+        lastpixely = pixely;
+        changeInnerHTML(ScoreID, parseInt(readInnerHTML(ScoreID)) + 1);
+        //document.getElementById('scores').innerHTML = parseInt(document.getElementById('scores').innerHTML) + 1;
+        if (parseInt(readInnerHTML(ScoreID)) > parseInt(readInnerHTML(HighestScoreID))) {
+            changeInnerHTML(HighestScoreID, parseInt(readInnerHTML(ScoreID)));        
+            //document.getElementById('highestScores').innerHTML = parseInt(document.getElementById('scores').innerHTML);
+        }
+        if (readColor(rlen - pixely - 1, pixelx + 1) == G) {
+            alert("You lost!");
+            changeInnerHTML(B1ID, "Start");
+            initiate();
+            return;
+        }
+        for (var i = 0; i < rlen; i++) {
+            var cells = rows[i].cells;
+            var clen = cells.length;
+            for (var k = 0; k < clen-1; k++) {
+                cells[k].style.background = cells[k+1].style.background;
+            }
+        }
+        var chance = Math.random();
+        if (chance > 1 - difficulty / 2500 && distance >= difficulty / 200 * MINDISTANCE) {
+            for (var i = parseInt(rlen / 3 * 2); i < rlen; i++) {
+                var cells = rows[i].cells;
+                cells[clen-1].style.background = 'green';
+            }
+            distance = 0;
+        }
+        else {
+            for (var i = parseInt(rlen / 3 * 2); i < rlen - 1; i++) {
+                var cells = rows[i].cells;
+                cells[clen-1].style.background = '';
+            }
+            distance++;
+        }
+        changeColor(rlen - pixely - 1, pixelx - 1, B);
+        for (var i = 0; i < lenOfMove; i++) {
+            if (moveTimes > 0 && moveTimes < (lenOfMove - 2) * DURATION + 1) {
+                if (moveTimes >= i * DURATION + 1 && moveTimes < (i + 1) * DURATION + 1) {
+                    pixely = pixelyMove[i + 2];
+                    moveTimes++;
+                }
+            } else {
+                pixely = pixelyMove[0];
+                moveTimes = 0;
+            }
+        }
+        /*if (moveTimes >= 1 && moveTimes < 1 + DURATION || (moveTimes >= 19 && moveTimes < 19 + DURATION)) {
+            pixely = pixely2;
+            moveTimes++;
+        } else if (moveTimes >= 4 && moveTimes < 4 + DURATION || (moveTimes >= 16 && moveTimes < 16 + DURATION)) {
+            pixely = pixely3;
+            moveTimes++;
+        } else if (moveTimes >= 7 && moveTimes < 16) {
+            pixely = pixely4;
+            moveTimes++;
+        } else if (moveTimes >= 22 && moveTimes < 25) {
+            pixely = pixely1;
+            moveTimes++;
+        } else if (moveTimes == 25) {
+            pixely = pixely0;
+            moveTimes = 0;
+        }*/
+        changeColor(rlen - pixely - 1, pixelx, R);
+        if (readInnerHTML(B1ID) == "Pause") {
+            setTimeout(move, 10);
+        }
+    }
+    function clickbutton1() {
+        if (readInnerHTML(B1ID) == "Start" || readInnerHTML(B1ID) == "Go On") {
+            changeInnerHTML(B1ID, "Pause");
+            move();
+        }
+        else {
+            changeInnerHTML(B1ID, "Go On");
+        }
+    }
+    function clickButton2() {
+        initiate();
+    }
+    function clickButton3() {
+        y = pixely;
+        pixely = pixelyMove[1];
+        changeColor(rlen - pixely - 1, pixelx, B);
+        changeColor(rlen - y - 1, pixelx, B);
+        moveTimes++;
+    }
+    initiate();
+    </script>
+    </html>
