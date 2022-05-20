@@ -36,14 +36,32 @@
             background: rgb(255, 255, 255);
             float: right;
         }
+        .div1 {
+            width: 1000px;
+            height: 300px;
+            margin: 50px auto;
+        }
+        .img1 {
+            float: left;
+            height: 200px;
+        }
+        .img2 {
+            float: right;
+            height: 200px;
+            background: url(imgs/Зорич.png) no-repeat center;
+        }
         </style>
         </head>
         <body>
-            <h1 align="center" face="宋体">RunJump</h1>
+            <div class="div1" id="container">
+                <img src="imgs/1.png" class="img1">
+                <img src="imgs/Зорич.png" class="img2">
+                <h1 align="center" face="宋体">RunJump</h1>
             <h2 align="center" face="宋体">Made By SLDRMK</h2>
             <h3 align="center" face="宋体">邵志豪&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 2021K8009991002&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 中国科学院大学2113班人工智能专业</h3>
+            <p align="center" face="Times New Romans">You are a little Ucaser(小果壳儿) and you have to Jump over the Зорич book.</p>
             <p align="center" face="Times New Romans">Please Press Space or Click "Jump" to Jump and avoid hitting the walls.</p>
-            <p align="center" face="Times New Romans">Please Press "Reset" to Upload the Settings.</p>
+            <p align="center" face="Times New Romans">Please Press "Reset" to Update the Settings.</p>
             <table class="mytb1">
                 <thead>
                     <td>Highest Score: </td>
@@ -64,6 +82,10 @@
             </table>
             <center><span class="span1" onclick="clickbutton1()" id=button1>Start</span>
                 <span class="span1" onclick="clickButton2()" id=button2>Reset</span></center>
+            </div>
+            <script type="text/javascript">
+                document.getElementById("container").style.width = String(document.documentElement.clientWidth/5*4) + "px";
+            </script>
             <table cellspacing="0" id=board>
                 <tbody>
                 </tbody>
@@ -175,7 +197,7 @@
             }
         }
         var chance = Math.random();
-        if (chance > 1 - difficulty / 5000 && distance >= difficulty / 200 * MINDISTANCE) {
+        if (chance > 0.98 && distance >= MINDISTANCE / 2) {
             for (var i = parseInt(rlen / 2); i < rlen; i++) {
                 var cells = rows[i].cells;
                 cells[clen-1].style.background = 'green';
@@ -219,7 +241,7 @@
         }*/
         changeColor(rlen - pixely - 1, pixelx, R);
         if (readInnerHTML(B1ID) == "Pause") {
-            setTimeout(move, difficulty / 100 * 10);
+            setTimeout(move, 100 / difficulty * 10);
         }
     }
     function clickbutton1() {
