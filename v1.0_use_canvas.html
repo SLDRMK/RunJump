@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>RunJump</title>
+    <style>
+        canvas {
+            margin:0 auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="board" width="10" height="2" ali></canvas>
+    <script type="text/javascript">    
+        var BoardID = "board";
+        var imgSrc = 'imgs/1.png';
+        var img1Src = 'imgs/Зорич.png'; 
+        var imgBSrc = 'imgs/blank.png';
+        var widthOfBoard = parseInt(screen.availWidth / 5 * 4);
+        var heightOfBoard = parseInt(widthOfBoard / 5);
+        var imgWidth = parseInt(widthOfBoard / 20);
+        var imgHeight = parseInt(imgWidth / 412 * 787);
+        var img1Width = parseInt(widthOfBoard / 15);
+        var img1Height = parseInt(img1Width / 353 * 422);
+        var canvas = document.getElementById(BoardID);
+        var c = canvas.getContext('2d');
+        canvas.width = widthOfBoard;
+        canvas.height = heightOfBoard;
+        //c.fillStyle = "red";
+        //c.fillRect(0, 0, widthOfBoard, heightOfBoard);
+        //var img = document.createElement("img");
+        //img.src = canvas.toDataURL(imgSrc);
+        //document.body.appendChild(img);
+        //var img = document.getElementById("img");
+        var img = new Image();
+        img.src = imgSrc;
+        img.onload = function() {
+            c.drawImage(this, widthOfBoard/10, parseInt(heightOfBoard-imgHeight), imgWidth, imgHeight);
+        }
+        var img1 = new Image();
+        img1.src = img1Src;
+        img1.onload = function() {
+            c.drawImage(this, widthOfBoard*9/10, parseInt(heightOfBoard-img1Height), img1Width, img1Height);
+        }
+        var imgB = new Image();
+        imgB.src = imgBSrc;
+        imgB.onload = function clear() {
+            c.drawImage(this, 0, 0, widthOfBoard, heightOfBoard);
+        }
+        function initiate() {
+            clear();
+        }
+        initiate();
+        </script>
+</body>
+</html>
